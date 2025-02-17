@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,15 +18,28 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://your-backend-url.com/login",
-        formData
+        `${import.meta.env.VITE_SERVER}/api/users/login`,
+        {
+          email: formData.email,
+          password: formData.password,
+        }
       );
+      
+    console.log("Response" + response.data);
+      // Save token to local storage
+      localStorage.setItem("token", response.data.token);
+  
+      alert("Login successful!");
       console.log("Login Successful:", response.data);
-      // Handle successful login (e.g., store token, redirect user, etc.)
+  
+      // Redirect to home page
+      navigate("/");
     } catch (error) {
       console.error("Login Failed:", error.response?.data || error.message);
+      alert("Login failed. Please check your credentials.");
     }
   };
+  
 
   return (
     <section className="bg-gray-50 dark:bg-gray-700 min-h-screen flex items-center justify-center">

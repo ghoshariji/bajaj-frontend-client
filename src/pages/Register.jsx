@@ -17,6 +17,8 @@ const Register = () => {
     });
   };
 
+  console.log(import.meta.env.VITE_SERVER);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.termsAccepted) {
@@ -29,11 +31,14 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/register", {
-        email: formData.email,
-        password: formData.password,
-      });
-
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER}/api/users/register`,
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+    
       console.log("Registration Successful:", response.data);
       alert("Registration successful!");
     } catch (error) {
@@ -41,7 +46,7 @@ const Register = () => {
       alert("Registration failed. Please try again.");
     }
   };
-
+  
   return (
     <section className="bg-gray-50 dark:bg-gray-700">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
