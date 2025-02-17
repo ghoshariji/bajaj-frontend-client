@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Dashboard = () => {
-
   const [userIds, setUserIds] = useState([]);
   const [userDetails, setUserDetails] = useState([]);
   const [topUsers, setTopUsers] = useState([]);
@@ -22,11 +21,14 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/workouts/user`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_SERVER}/api/workouts/user`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-        console.log(res.data)
+        console.log(res.data);
         setUserIds(res.data.userIds);
         setUserDetails(res.data.userDetails);
         setTopUsers(res.data.topUsers);
@@ -45,15 +47,16 @@ const Dashboard = () => {
         <div className="bg-white p-6 shadow-md rounded-lg sm:col-span-1 lg:col-span-1">
           <h2 className="text-xl font-semibold mb-4">Top Ranked Users</h2>
           <ul>
-            {topUsers.map((user, index) => (
-              <li
-                key={index}
-                className="flex justify-between p-2 border-b last:border-none"
-              >
-                <span className="font-medium">{user.name}</span>
-                <span className="text-gray-500">{user.score} pts</span>
-              </li>
-            ))}
+            {topUsers.length > 0 &&
+              topUsers.map((user, index) => (
+                <li
+                  key={index}
+                  className="flex justify-between p-2 border-b last:border-none"
+                >
+                  <span className="font-medium">{user.name}</span>
+                  <span className="text-gray-500">{user.score} pts</span>
+                </li>
+              ))}
           </ul>
         </div>
 
@@ -62,7 +65,7 @@ const Dashboard = () => {
           <h2 className="text-xl font-semibold mb-4">New Challenges</h2>
           <div className="flex justify-center">
             <Link
-              to={`https://aiwork-omega.vercel.app/?token=${localStorage.getItem("token")}`}  // The URL you want to navigate to
+              to={`https://aiwork-omega.vercel.app/?token=${localStorage.getItem("token")}`} // The URL you want to navigate to
               className="bg-blue-500 text-white px-6 py-3 rounded-md flex items-center"
             >
               View All Challenges <ChevronRight className="ml-2" />
@@ -74,7 +77,7 @@ const Dashboard = () => {
         <div className="bg-white p-6 shadow-md rounded-lg sm:col-span-1 lg:col-span-3">
           <h2 className="text-xl font-semibold mb-4">Performance Analytics</h2>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={topUsers} layout="vertical">
+            <BarChart data={topUsers ? topUsers : []} layout="vertical">
               <YAxis dataKey="name" type="category" width={100} />
               <XAxis type="number" hide />
               <Tooltip />

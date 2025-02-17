@@ -55,7 +55,7 @@ const Leader = () => {
               </tr>
             </thead>
             <tbody>
-              {topUsers.map((user, index) => (
+              {topUsers.length > 0 && topUsers.map((user, index) => (
                 <tr key={index} className="border-t">
                   <td className="px-4 py-2">#{index + 1}</td>
                   <td className="px-4 py-2">{user.name}</td>
@@ -70,7 +70,7 @@ const Leader = () => {
         <div className="mt-6 w-full h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={topUsers}
+              data={topUsers ? topUsers : []}
               layout="vertical"
               margin={{ top: 10, right: 30, left: 20, bottom: 5 }}
             >

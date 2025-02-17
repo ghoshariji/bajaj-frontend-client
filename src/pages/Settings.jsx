@@ -15,27 +15,27 @@ const Settings = () => {
   const navigate = useNavigate(); // For redirection instead of useHistory
 
   useEffect(() => {
-    // Fetch current user profile data
     const fetchProfile = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/users/profile`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, 
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         setProfile({
           name: response.data.name,
           email: response.data.email,
-          profilePicture: response.data.profilePicture ? response.data.profilePicture : null,
+          profilePicture: response.data.profilePicture || null,
         });
       } catch (error) {
         setMessage("Failed to fetch profile data.");
         console.error("Profile fetch error:", error);
       }
     };
-    
+  
     fetchProfile();
   }, []);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,50 +45,81 @@ const Settings = () => {
     }));
   };
 
-  const handleFileChange = (e) => {
+  // const handleFileChange = (e) => {
+  //   setProfile((prevProfile) => ({
+  //     ...prevProfile,
+  //     profilePicture: e.target.files[0], // Update profile picture file
+  //   }));
+  // };
+
+// Frontend Profile Update Function
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+
+  const formData = new FormData();
+  formData.append("name", profile.name);
+
+  if (profile.password) {
+    formData.append("password", profile.password);
+  }
+
+  if (profile.profilePicture) {
+    formData.append("profilePicture", profile.profilePicture);
+  }
+
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_SERVER}/api/users/profile`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    setMessage("Profile updated successfully.");
     setProfile((prevProfile) => ({
       ...prevProfile,
-      profilePicture: e.target.files[0], // Update profile picture file
+      name: response.data.name,
+      profilePicture: response.data.profilePicture,
     }));
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("name", profile.name);
-    formData.append("password", profile.password);
-    if (profile.profilePicture) {
-      formData.append("profilePicture", profile.profilePicture);
+    navigate("/");
+  } catch (error) {
+    console.error("Update error:", error);
+    setMessage(
+      error.response?.data?.message || "Profile update failed. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+  
+
+// Frontend Utility Function
+const createImageUrl = (fileData, contentType) => {
+  try {
+    if (fileData?.startsWith("data:")) {
+      return fileData; // Already a base64 string
     }
+    const blob = new Blob([new Uint8Array(fileData)], { type: contentType });
+    return URL.createObjectURL(blob);
+  } catch (error) {
+    console.error("Error creating image URL:", error);
+    return "";
+  }
+};
 
-    try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_SERVER}/api/users/profile`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "multipart/form-data", // This is important for file upload
-          },
-        }
-      );
-      setMessage("Profile updated successfully.");
-      setProfile({
-        ...profile,
-        name: response.data.name,
-        profilePicture: response.data.profilePicture ? response.data.profilePicture : null, // Set new profile picture if updated
-      });
+  const handleFileChange = (e) => {
 
-      // Redirect after successful profile update
-      navigate("/dashboard"); // Replace with your desired route
-    } catch (error) {
-      setMessage("Profile update failed.");
-    } finally {
-      setLoading(false);
-    }
+    setProfile({ ...profile, profilePicture: e.target.files[0] });
+
   };
-
+  
   return (
     <Layout>
       <div className="container mx-auto p-6">
@@ -146,26 +177,28 @@ const Settings = () => {
 
           {/* Profile Picture Upload */}
           <div>
-            <label htmlFor="profilePicture" className="block text-sm font-medium">
-              Profile Picture
-            </label>
-            <input
-              type="file"
-              id="profilePicture"
-              name="profilePicture"
-              onChange={handleFileChange}
-              className="mt-1 block w-full px-3 py-2 border rounded-md"
-            />
-            {profile.profilePicture && (
-              <div className="mt-2">
-                <img
-                  src={URL.createObjectURL(profile.profilePicture)}
-                  alt="Profile"
-                  className="w-20 h-20 rounded-full object-cover"
-                />
-              </div>
-            )}
-          </div>
+          <label htmlFor="profilePicture" className="block text-sm font-medium">
+            Profile Picture
+          </label>
+          <input
+            type="file"
+            id="profilePicture"
+            name="profilePicture"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="mt-1 block w-full px-3 py-2 border rounded-md"
+          />
+          {profile?.profilePicture && typeof profile.profilePicture === "string" && (
+            <div className="mt-2">
+              <img
+                src={profile.profilePicture}
+                alt="Profile"
+                className="w-20 h-20 rounded-full object-cover"
+              />
+            </div>
+          )}
+        </div>
+        
 
           {/* Submit Button */}
           <div>
