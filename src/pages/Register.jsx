@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,7 @@ const Register = () => {
     confirmPassword: "",
     termsAccepted: false,
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -18,19 +21,21 @@ const Register = () => {
     });
   };
 
-  //console.log(import.meta.env.VITE_SERVER);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Check if terms are accepted
     if (!formData.termsAccepted) {
-      alert("Please accept the terms and conditions.");
+      toast("Please accept the terms and conditions.");
       return;
     }
+  
+    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast("Passwords do not match!");
       return;
     }
-
+  
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER}/api/users/register`,
@@ -40,12 +45,16 @@ const Register = () => {
           password: formData.password,
         }
       );
-
+  
       console.log("Registration Successful:", response.data);
-      alert("Registration successful!");
+      toast("Registration successful!");
+  
+      
+      navigate("/"); 
+  
     } catch (error) {
       console.error("Registration Error:", error.response?.data || error);
-      alert("Registration failed. Please try again.");
+      toast("Registration failed. Please try again.");
     }
   };
 
