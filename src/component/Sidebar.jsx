@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,useNavigate } from "react-router-dom";
 import { Menu, X, Home, User, Settings, LogOut } from "lucide-react";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();  // Get the current route
 
+ 
+  const navigate = useNavigate(); 
+
   // Function to check if the link is active
   const isActive = (path) => location.pathname === path;
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
 
   return (
     <div
@@ -58,12 +67,12 @@ const Sidebar = () => {
           </span>
         </Link>
         <button
-          className="flex items-center px-4 py-2 mt-auto hover:bg-red-600"
-          // Add logic to handle logout here
-        >
-          <LogOut size={24} />
-          <span className={`${isSidebarOpen ? "ml-4" : "hidden"}`}>Logout</span>
-        </button>
+        className="flex items-center px-4 py-2 mt-auto hover:bg-red-600 cursor-pointer"
+        onClick={handleLogout} // Attach logout function here
+      >
+        <LogOut size={24} />
+        <span className={`${isSidebarOpen ? "ml-4" : "hidden"}`}>Logout</span>
+      </button>
       </nav>
     </div>
   );
