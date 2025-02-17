@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../component/Layout";
 import {
   BarChart,
   Bar,
@@ -9,6 +8,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
+import Lay from "../component/Lay";
 
 
 
@@ -40,7 +40,7 @@ const Leader = () => {
     if (token) fetchWorkouts();
   }, [token]);
   return (
-    <Layout>
+    <Lay>
       <div className="bg-white p-6 shadow-md rounded-lg">
         <h2 className="text-2xl font-semibold mb-4">Leaderboard</h2>
 
@@ -87,7 +87,7 @@ const Leader = () => {
           </ResponsiveContainer>
         </div>
       </div>
-    </Layout>
+    </Lay>
   );
 };
 

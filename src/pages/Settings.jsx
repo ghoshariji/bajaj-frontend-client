@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../component/Layout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Using useNavigate for redirection
+import Lay from "../component/Lay";
 
 const Settings = () => {
   const [profile, setProfile] = useState({
@@ -121,7 +121,7 @@ const createImageUrl = (fileData, contentType) => {
   };
   
   return (
-    <Layout>
+    <Lay>
       <div className="container mx-auto p-6">
         <h2 className="text-2xl font-bold mb-4">User Profile Settings</h2>
         {message && <div className="alert alert-info mb-4">{message}</div>}
@@ -212,7 +212,7 @@ const createImageUrl = (fileData, contentType) => {
           </div>
         </form>
       </div>
-    </Layout>
+    </Lay>
   );
 };
 
