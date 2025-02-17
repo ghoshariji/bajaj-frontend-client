@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
-const Layout = ({ children }) => {
+const Lay = ({ children }) => {
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -15,4 +15,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export default Layout;
+export default Lay;

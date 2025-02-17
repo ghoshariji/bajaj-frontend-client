@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../component/Layout";
 import {
   BarChart,
   Bar,
@@ -11,6 +10,7 @@ import {
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Lay from "../component/Lay";
 
 const Dashboard = () => {
   const [userIds, setUserIds] = useState([]);
@@ -41,7 +41,7 @@ const Dashboard = () => {
   }, [token]);
 
   return (
-    <Layout>
+    <Lay>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         {/* Rank Section */}
         <div className="bg-white p-6 shadow-md rounded-lg sm:col-span-1 lg:col-span-1">
@@ -86,7 +86,7 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
       </div>
-    </Layout>
+    </Lay>
   );
 };
 
