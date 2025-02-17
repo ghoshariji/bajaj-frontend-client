@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../component/Layout";
 import {
   BarChart,
@@ -10,18 +10,33 @@ import {
 } from "recharts";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Dashboard = () => {
-  const data = [
-    { name: "John", score: 120 },
-    { name: "Alice", score: 100 },
-    { name: "Bob", score: 90 },
-    { name: "Charlie", score: 80 },
-  ];
 
-  useEffect(()=>{
+  const [userIds, setUserIds] = useState([]);
+  const [userDetails, setUserDetails] = useState([]);
+  const [topUsers, setTopUsers] = useState([]);
+  const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
 
-  })
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/workouts/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log(res.data)
+        setUserIds(res.data.userIds);
+        setUserDetails(res.data.userDetails);
+        setTopUsers(res.data.topUsers);
+      } catch (error) {
+        console.error("Error fetching workouts:", error);
+      }
+    };
+
+    if (token) fetchWorkouts();
+  }, [token]);
 
   return (
     <Layout>
@@ -30,7 +45,7 @@ const Dashboard = () => {
         <div className="bg-white p-6 shadow-md rounded-lg sm:col-span-1 lg:col-span-1">
           <h2 className="text-xl font-semibold mb-4">Top Ranked Users</h2>
           <ul>
-            {data.map((user, index) => (
+            {topUsers.map((user, index) => (
               <li
                 key={index}
                 className="flex justify-between p-2 border-b last:border-none"
@@ -59,7 +74,7 @@ const Dashboard = () => {
         <div className="bg-white p-6 shadow-md rounded-lg sm:col-span-1 lg:col-span-3">
           <h2 className="text-xl font-semibold mb-4">Performance Analytics</h2>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={data} layout="vertical">
+            <BarChart data={topUsers} layout="vertical">
               <YAxis dataKey="name" type="category" width={100} />
               <XAxis type="number" hide />
               <Tooltip />
