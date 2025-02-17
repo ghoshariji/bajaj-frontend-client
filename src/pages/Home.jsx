@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../component/Layout";
 import {
   BarChart,
@@ -18,6 +18,10 @@ const Dashboard = () => {
     { name: "Bob", score: 90 },
     { name: "Charlie", score: 80 },
   ];
+
+  useEffect(()=>{
+
+  })
 
   return (
     <Layout>
@@ -43,7 +47,7 @@ const Dashboard = () => {
           <h2 className="text-xl font-semibold mb-4">New Challenges</h2>
           <div className="flex justify-center">
             <Link
-              to="https://aiwork-omega.vercel.app/"  // The URL you want to navigate to
+              to={`https://aiwork-omega.vercel.app/?token=${localStorage.getItem("token")}`}  // The URL you want to navigate to
               className="bg-blue-500 text-white px-6 py-3 rounded-md flex items-center"
             >
               View All Challenges <ChevronRight className="ml-2" />
