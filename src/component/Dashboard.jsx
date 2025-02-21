@@ -12,7 +12,7 @@ const Dashboard = () => {
     <div className="flex h-screen">
       <div className="flex-1 p-1 overflow-auto">
         <Cards />
-        <ProgressBar />
+         <ProgressBar />
         <Userside/>
       </div>
     </div>
