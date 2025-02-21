@@ -14,6 +14,7 @@ import Setting from "./pages/Settings";
 import Leader1 from "./pages/Leader1";
 import Dashboard from "./component/Dashboard";
 import ProductPage from "./pages/ProductPage";
+import About from "./pages/About";
 
 // PrivateRoute component checks for token presence
 const PrivateRoute = ({ children }) => {
@@ -47,11 +48,19 @@ const App = () => {
               </PrivateRoute>
             }
           />
-             <Route
+          <Route
             path="/product"
             element={
               <PrivateRoute>
                 <ProductPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <PrivateRoute>
+                <About />
               </PrivateRoute>
             }
           />

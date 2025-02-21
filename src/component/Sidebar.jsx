@@ -73,6 +73,15 @@ const Sidebar = () => {
           <Settings size={24} />
           <span className={`${isSidebarOpen ? "ml-4" : "hidden"}`}>Settings</span>
         </Link>
+        <Link
+          to="/about"
+          className={`flex items-center px-4 py-2 hover:bg-gray-700 ${
+            isActive("/about") ? "bg-gray-700" : ""
+          }`}
+        >
+          <Settings size={24} />
+          <span className={`${isSidebarOpen ? "ml-4" : "hidden"}`}>About Us</span>
+        </Link>
 
         <div className={`pr-2 py-2 h-full flex flex-col ${isSidebarOpen ? "block" : "hidden"}`}>
           <HelpCenterCard />
