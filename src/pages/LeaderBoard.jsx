@@ -69,18 +69,23 @@ const Leader = () => {
           <main className="col-span-9 space-y-6">
             {/* Stats */}
             <div className="grid grid-cols-4 gap-4">
-              {[
-                { label: "Fully diluted shares", value: "1,000,000" },
-                { label: "Total cash raised", value: "$1,245,000" },
-                { label: "Stakeholders", value: "2400" },
-                { label: "In draft", value: "$4,500" },
-              ].map((item, index) => (
-                <Card key={index} className="text-center">
-                  <p className="text-gray-500 text-sm">{item.label}</p>
-                  <p className="text-lg font-semibold">{item.value}</p>
-                </Card>
-              ))}
-            </div>
+            {topUsers.length > 0 ? (
+              [...topUsers]
+                .sort((a, b) => b.score - a.score) 
+                .slice(0, 4) 
+                .map((user, index) => (
+                  <Card key={index} className="text-center">
+                    <p className="text-gray-500 text-sm">Rank #{index + 1}</p>
+                    <p className="text-lg font-semibold">{user.name}</p>
+                    <p className="text-md font-medium">Score: {user.score}</p>
+                  </Card>
+                ))
+            ) : (
+              <p className="text-center col-span-4 text-gray-500">No top users found.</p>
+            )}
+          </div>
+          
+          
 
             <Tracker>
             <div className="flex justify-between items-center">
