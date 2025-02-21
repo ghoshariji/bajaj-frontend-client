@@ -94,11 +94,18 @@ const Cards = () => {
       </div>
 
       <div className="p-4 bg-gradient-to-r from-green-300 to-green-100 rounded-xl shadow-sm">
-        <p className="text-2xl font-semibold mt-1 uppercase">{ai && ai.text}</p>
-        <div className="flex justify-between mt-2">
-          <span className="text-gray-500 text-xs">{ai && ai.aiResponse}</span>
-        </div>
+  {ai ? (
+    <>
+      <p className="text-2xl font-semibold mt-1 uppercase">{ai.text}</p>
+      <div className="flex justify-between mt-2">
+        <span className="text-gray-500 text-xs">{ai.aiResponse}</span>
       </div>
+    </>
+  ) : (
+    <p className="text-center text-gray-500 text-lg font-semibold">No data found</p>
+  )}
+</div>
+
 
       {/* Modal */}
       {showModal && (
