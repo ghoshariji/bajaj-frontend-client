@@ -31,6 +31,7 @@ const Leader = () => {
   const [selectedExercise, setSelectedExercise] = useState("push_up");
   const [loading, setLoading] = useState(false);
 
+  const [userWorkOut,setUserWorkOut] = useState([])
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -45,7 +46,8 @@ const Leader = () => {
           }
         );
         setLoading(false);
-
+        setUserWorkOut(res.data.userWorkouts)
+        console.log(res.data)
         setUserIds(res.data.allUsersWorkouts.map((user) => user._id));
         setUserDetails(res.data.allUsersWorkouts);
         setTopUsers(res.data.topUsers || []);
@@ -126,26 +128,24 @@ const Leader = () => {
                 </select>
               </div>
               <div className="h-60 mt-4 bg-gray-700 rounded-lg p-4">
-                {filteredUsers.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={filteredUsers}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="white" />
-                      <XAxis dataKey="userDetails.name" stroke="white" />
-                      <YAxis stroke="white" />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "black",
-                          color: "white",
-                        }}
-                      />
-                      <Bar dataKey="totalScore" fill="white" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p className="text-white text-center">
-                    No user data available
-                  </p>
-                )}
+              <ResponsiveContainer width="100%" height="100%">
+  <BarChart data={userWorkOut.map(workout => ({
+    name: workout.workoutName,
+    score: parseInt(workout.result, 10), // Ensure result is a number
+  }))}>
+    <CartesianGrid strokeDasharray="3 3" stroke="white" />
+    <XAxis dataKey="name" stroke="white" />
+    <YAxis stroke="white" />
+    <Tooltip
+      contentStyle={{
+        backgroundColor: "black",
+        color: "white",
+      }}
+    />
+    <Bar dataKey="score" fill="white" />
+  </BarChart>
+</ResponsiveContainer>
+
               </div>
             </Card>
           </main>
