@@ -54,6 +54,7 @@ const Sidebar = () => {
           <span className={`${isSidebarOpen ? "ml-4" : "hidden"}`}>Leader</span>
         </Link>
 
+
         <Link
           to="/setting"
           className={`flex items-center px-4 py-2 hover:bg-gray-700 ${

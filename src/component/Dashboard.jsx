@@ -12,7 +12,6 @@ const Dashboard = () => {
     <div className="flex h-screen">
       <div className="flex-1 p-1 overflow-auto">
         <Cards />
-        <ProgressBar />
         <Userside/>
       </div>
     </div>
