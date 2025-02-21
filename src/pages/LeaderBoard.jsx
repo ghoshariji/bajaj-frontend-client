@@ -87,7 +87,7 @@ const Leader = () => {
           
           
 
-            <Tracker>
+            {/**<Tracker>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">Top Users Score Graph </h3>
               <select
@@ -114,7 +114,7 @@ const Leader = () => {
                 <p className="text-white text-center">No user data available</p>
               )}
             </div>
-          </Tracker>
+          </Tracker>**/}
            
 
 
@@ -151,7 +151,7 @@ const Leader = () => {
 
 
             {/* User Table */}
-            <Card>
+         {/**    <Card>
               <h3 className="text-lg font-semibold">User Rankings</h3>
               <table className="w-full mt-4 text-sm">
                 <thead>
@@ -179,7 +179,7 @@ const Leader = () => {
                   )}
                 </tbody>
               </table>
-            </Card>
+            </Card>*/}
 
             
           </main>
