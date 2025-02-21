@@ -28,7 +28,7 @@ const Sidebar = () => {
         <span
           className={`${isSidebarOpen ? "block" : "hidden"} text-lg font-bold`}
         >
-          Admin
+          Dashboard
         </span>
         <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}

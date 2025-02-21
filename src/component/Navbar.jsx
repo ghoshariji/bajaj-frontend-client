@@ -50,7 +50,7 @@ const Navbar = () => {
 
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center">
-      <h1 className="text-xl font-bold">Admin Dashboard</h1>
+      <h1 className="text-xl font-bold">Dashboard</h1>
       <div className="flex items-center space-x-4">
         <span className="text-gray-700">Welcome, {profileName} </span>
         <img
