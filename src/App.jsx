@@ -13,6 +13,7 @@ import Leader from "./pages/LeaderBoard";
 import Setting from "./pages/Settings";
 import Leader1 from "./pages/Leader1";
 import Dashboard from "./component/Dashboard";
+import ProductPage from "./pages/ProductPage";
 
 // PrivateRoute component checks for token presence
 const PrivateRoute = ({ children }) => {
@@ -43,6 +44,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Leader />
+              </PrivateRoute>
+            }
+          />
+             <Route
+            path="/product"
+            element={
+              <PrivateRoute>
+                <ProductPage />
               </PrivateRoute>
             }
           />

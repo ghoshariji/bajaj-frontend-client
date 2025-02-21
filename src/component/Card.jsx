@@ -1,50 +1,53 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "./Loader";
-
+import { useNavigate } from "react-router-dom";
 const Cards = () => {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [time, setTime] = useState("");
   const [repeatDaily, setRepeatDaily] = useState(false);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     try {
-      setLoading(true)
-      await axios.post(   `${import.meta.env.VITE_SERVER}/api/schedule`, {
+      setLoading(true);
+      await axios.post(`${import.meta.env.VITE_SERVER}/api/schedule`, {
         userId: "65a4bcdef0123456789abcd",
         time,
         repeatDaily,
       });
-      setLoading(false)
+      setLoading(false);
       alert("Schedule set successfully!");
       setShowModal(false);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
 
       console.error("Error scheduling:", error);
     }
   };
 
-
   const [user, setUser] = useState(null);
   const token = localStorage.getItem("token");
 
-  const [ai,setAi] = useState({})
+  const [ai, setAi] = useState({});
   const fetchData = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
-      const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/users/user`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setLoading(false)
+      const res = await axios.get(
+        `${import.meta.env.VITE_SERVER}/api/users/user`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setLoading(false);
 
-      console.log(res.data.aiResponses[0])
+      console.log(res.data.aiResponses[0]);
       setUser(res.data.user);
-      setAi(res.data.aiResponses[0])
+      setAi(res.data.aiResponses[0]);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
 
       console.error("Error fetching user details:", error);
     }
@@ -62,7 +65,9 @@ const Cards = () => {
         <h3 className="text-gray-600 text-sm">
           "Push harder, grow stronger daily." 💪🔥
         </h3>
-        <p className="text-3xl font-semibold mt-1">Burn 500–1000 kcal/day to lose about 0.5–1 kg per week.</p>
+        <p className="text-3xl font-semibold mt-1">
+          Burn 500–1000 kcal/day to lose about 0.5–1 kg per week.
+        </p>
         <button
           className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
           onClick={() => setShowModal(true)}
@@ -74,8 +79,18 @@ const Cards = () => {
       {/* Other Cards (No Changes) */}
       <div className="p-4 bg-gradient-to-r from-orange-300 to-orange-100 rounded-xl shadow-sm">
         <h3 className="text-gray-600 text-sm">Your Status</h3>
-        <p className="text-3xl font-semibold mt-1 text-red-500">{user && user.name}</p>
-        <span className="text-gray-500 text-xs">{user && user.email}</span>
+        <p className="text-3xl font-semibold mt-1 text-red-500">
+          {user && user.name} -         <span className="text-gray-500 text-xs">{user && user.email}</span>
+
+        </p>
+
+        {/* Take New Challenge Button */}
+        <button
+          className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg shadow-md hover:bg-red-600 transition"
+          onClick={() => window.location.href = `http://localhost:8080/?token=${localStorage.getItem("token")}`}
+          >
+          Take New Challenge
+        </button>
       </div>
 
       <div className="p-4 bg-gradient-to-r from-green-300 to-green-100 rounded-xl shadow-sm">

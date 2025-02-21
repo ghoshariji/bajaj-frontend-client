@@ -53,6 +53,15 @@ const Sidebar = () => {
           <User size={24} />
           <span className={`${isSidebarOpen ? "ml-4" : "hidden"}`}>Leader</span>
         </Link>
+        <Link
+          to="/product"
+          className={`flex items-center px-4 py-2 hover:bg-gray-700 ${
+            isActive("/product") ? "bg-gray-700" : ""
+          }`}
+        >
+          <User size={24} />
+          <span className={`${isSidebarOpen ? "ml-4" : "hidden"}`}>Reedem Product</span>
+        </Link>
 
 
         <Link
