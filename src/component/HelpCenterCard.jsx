@@ -4,7 +4,7 @@ import { HelpCircle } from "lucide-react";
 import axios from "axios";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = "AIzaSyBw_WJYny7xoZfn7p9UGhLYqr4eWnKXIp8"; // Replace with your actual Gemini API key
+const API_KEY = "AIzaSyBw_WJYny7xoZfn7p9UGhLYqr4eWnKXIp8"; 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 const HelpCenterCard = () => {

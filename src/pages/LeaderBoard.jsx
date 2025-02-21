@@ -21,28 +21,36 @@ const Leader = () => {
   const [selectedExercise, setSelectedExercise] = useState("push_up"); 
   const token = localStorage.getItem("token");
 
+
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_SERVER}/api/workouts/user`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        console.log(res.data);
-        setUserIds(res.data.userIds);
-        setUserDetails(res.data.userDetails);
+        console.log("Fetching from:", `${import.meta.env.VITE_SERVER}/api/workouts/user`);
+        console.log("Token:", token);
+    
+        const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/workouts/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+    
+        console.log("API Response:", res.data);
+    
+        setUserIds(res.data.allUsersWorkouts.map(user => user._id));
+        setUserDetails(res.data.allUsersWorkouts);
         setTopUsers(res.data.topUsers);
       } catch (error) {
-        console.error("Error fetching workouts:", error);
+        console.error("Axios Error:", error);
+        if (error.response) {
+          console.error("Response Data:", error.response.data);
+        }
       }
     };
-
-    if (token) fetchWorkouts();
+    
+  
+    fetchWorkouts();
   }, [token]);
 
+  const filteredUsers = topUsers.filter(user => user.workoutNames.includes(selectedExercise));
+  
 
   return (
     <Lay>
@@ -70,53 +78,20 @@ const Leader = () => {
             {/* Stats */}
             <div className="grid grid-cols-4 gap-4">
             {topUsers.length > 0 ? (
-              [...topUsers]
+              topUsers
                 .sort((a, b) => b.score - a.score) 
                 .slice(0, 4) 
                 .map((user, index) => (
                   <Card key={index} className="text-center">
                     <p className="text-gray-500 text-sm">Rank #{index + 1}</p>
-                    <p className="text-lg font-semibold">{user.name}</p>
-                    <p className="text-md font-medium">Score: {user.score}</p>
+                    <p className="text-lg font-semibold">{user.userDetails.name}</p>
+                    <p className="text-md font-medium">Score: {user.totalScore}</p>
                   </Card>
                 ))
             ) : (
               <p className="text-center col-span-4 text-gray-500">No top users found.</p>
             )}
           </div>
-          
-          
-
-            {/**<Tracker>
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">Top Users Score Graph </h3>
-              <select
-                className="p-2 border rounded-md"
-                value={selectedExercise}
-                onChange={(e) => setSelectedExercise(e.target.value)}
-              >
-                <option value="push_up">Push Up</option>
-                <option value="squat">Squat</option>
-              </select>
-            </div>
-            <div className="h-60 mt-4 bg-gray-700 rounded-lg p-4">
-              {topUsers.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={topUsers}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="white" />
-                    <XAxis dataKey="name" stroke="white" />
-                    <YAxis stroke="white" />
-                    <Tooltip contentStyle={{ backgroundColor: "black", color: "white" }} />
-                    <Bar dataKey="score" fill="white" />
-                  </BarChart>
-                </ResponsiveContainer>
-              ) : (
-                <p className="text-white text-center">No user data available</p>
-              )}
-            </div>
-          </Tracker>**/}
-           
-
 
             <Card>
               <div className="flex justify-between items-center">
@@ -131,57 +106,22 @@ const Leader = () => {
                 </select>
               </div>
               <div className="h-60 mt-4 bg-gray-700 rounded-lg p-4">
-                {topUsers.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={topUsers}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="white" />
-                      <XAxis dataKey="name" stroke="white" />
-                      <YAxis stroke="white" />
-                      <Tooltip contentStyle={{ backgroundColor: "black", color: "white" }} />
-                      <Bar dataKey="score" fill="white" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p className="text-white text-center">No user data available</p>
-                )}
-              </div>
+              {filteredUsers.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={filteredUsers}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="white" />
+                    <XAxis dataKey="userDetails.name" stroke="white" />
+                    <YAxis stroke="white" />
+                    <Tooltip contentStyle={{ backgroundColor: "black", color: "white" }} />
+                    <Bar dataKey="totalScore" fill="white" />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <p className="text-white text-center">No user data available</p>
+              )}
+            </div>
             </Card>
-
-
-
-
-            {/* User Table */}
-         {/**    <Card>
-              <h3 className="text-lg font-semibold">User Rankings</h3>
-              <table className="w-full mt-4 text-sm">
-                <thead>
-                  <tr className="text-left">
-                    <th>Rank</th>
-                    <th>User</th>
-                    <th>Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {topUsers.length > 0 ? (
-                    topUsers.map((user, index) => (
-                      <tr key={index} className="border-t">
-                        <td>#{index + 1}</td>
-                        <td>{user.name}</td>
-                        <td>{user.score}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="3" className="text-center text-gray-500">
-                        No data available
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </Card>*/}
-
-            
+         
           </main>
         </div>
       </div>
