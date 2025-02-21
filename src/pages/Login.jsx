@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import Loader from "../component/Loader";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const [loading,setLoading] = useState(false)
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -17,6 +20,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER}/api/users/login`,
         {
@@ -24,7 +28,7 @@ const Login = () => {
           password: formData.password,
         }
       );
-      
+      setLoading(false)
     console.log("Response" + response.data);
       // Save token to local storage
       localStorage.setItem("token", response.data.token);
@@ -35,6 +39,8 @@ const Login = () => {
       // Redirect to home page
       navigate("/");
     } catch (error) {
+      setLoading(false)
+
       console.error("Login Failed:", error.response?.data || error.message);
       toast.error("Login failed. Please check your credentials.");
     }
@@ -43,6 +49,7 @@ const Login = () => {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-700 min-h-screen flex items-center justify-center">
+      {loading && <Loader />}
       <div className="w-full max-w-md bg-white rounded-lg shadow-md dark:border dark:bg-gray-800 dark:border-gray-700 p-6">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
           Login to Your Account

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
+import Loader from "../component/Loader";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const Register = () => {
     termsAccepted: false,
   });
   const navigate = useNavigate();
+  const [loading,setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -37,6 +39,7 @@ const Register = () => {
       return;
     }
   
+    setLoading(true)
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER}/api/users/register`,
@@ -51,10 +54,12 @@ const Register = () => {
       console.log("Registration Successful:", response.data);
       toast("Registration successful!");
   
-      
+      setLoading(false)
       navigate("/"); 
   
     } catch (error) {
+      setLoading(false)
+
       console.error("Registration Error:", error.response?.data || error);
       toast("Registration failed. Please try again.");
     }
@@ -62,6 +67,8 @@ const Register = () => {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-700">
+            {loading && <Loader />}
+
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">

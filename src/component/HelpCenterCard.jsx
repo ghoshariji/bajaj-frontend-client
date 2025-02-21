@@ -59,28 +59,6 @@ const HelpCenterCard = () => {
   };
   
   // Function to Fetch User Chats
-  const fetchChats = async () => {
-    try {
-      const token = localStorage.getItem("token"); // Get token
-      if (!token) {
-        console.error("No token found, user is not logged in.");
-        return;
-      }
-  
-      const response = await axios.get( `${import.meta.env.VITE_SERVER}/api/chat/user-chats`, {
-        headers: { Authorization: token }, // Send token in headers
-      });
-  
-      console.log(response.data.chats);
-    } catch (error) {
-      console.error("Error fetching chats:", error);
-    }
-  };4
-
-
-  useEffect(()=>{
-    fetchChats()
-  },[])
   
   return (
     <div className="bg-white shadow-lg p-5 rounded-lg max-w-md mx-auto">

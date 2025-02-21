@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Loader from "./Loader";
 
 const Cards = () => {
   const [showModal, setShowModal] = useState(false);
   const [time, setTime] = useState("");
   const [repeatDaily, setRepeatDaily] = useState(false);
+  const [loading,setLoading] = useState(false)
 
   const handleSubmit = async () => {
     try {
+      setLoading(true)
       await axios.post(   `${import.meta.env.VITE_SERVER}/api/schedule`, {
         userId: "65a4bcdef0123456789abcd",
         time,
         repeatDaily,
       });
+      setLoading(false)
       alert("Schedule set successfully!");
       setShowModal(false);
     } catch (error) {
+      setLoading(false)
+
       console.error("Error scheduling:", error);
     }
   };
@@ -27,14 +33,19 @@ const Cards = () => {
   const [ai,setAi] = useState({})
   const fetchData = async () => {
     try {
+      setLoading(true)
+
       const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/users/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      setLoading(false)
 
       console.log(res.data.aiResponses[0])
       setUser(res.data.user);
       setAi(res.data.aiResponses[0])
     } catch (error) {
+      setLoading(false)
+
       console.error("Error fetching user details:", error);
     }
   };
@@ -45,6 +56,7 @@ const Cards = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
       {/* First Card with Set Schedule Button */}
+      {loading && <Loader />}
 
       <div className="p-4 bg-gradient-to-r from-purple-300 to-purple-100 rounded-xl shadow-sm">
         <h3 className="text-gray-600 text-sm">

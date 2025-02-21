@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import Loader from "./Loader";
 
 const CompletedTasksData = [
   { name: "Apr", value: 200 },
@@ -26,14 +27,21 @@ const Userside = () => {
   const [showSquats, setShowSquats] = useState(true);
   const [workoutData, setWorkoutData] = useState([]);
   const [aiInsights, setAiInsights] = useState("");
+    const [loading,setLoading] = useState(false)
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER}/api/workouts/top-workouts`
         );
+        setLoading(false)
+
         setWorkouts(response.data);
       } catch (error) {
+        setLoading(false)
+
         console.error("Error fetching workout data:", error);
       }
     };
@@ -49,16 +57,21 @@ const Userside = () => {
   useEffect(() => {
     const fetchWorkoutData = async () => {
       try {
+        setLoading(true)
+
         const token = localStorage.getItem("token");
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER}/api/workouts/top-workouts-graph`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        setLoading(false)
 
         console.log(response.data);
         setWorkoutData(response.data.workouts);
         setAiInsights(response.data.insights);
       } catch (error) {
+        setLoading(false)
+
         console.error("Error fetching workout data:", error);
       }
     };
@@ -70,6 +83,8 @@ const Userside = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 h-50 bg-white-900">
       {/* Left Side - Chart */}
+      {loading && <Loader />}
+
       <div className="bg-gray-800 text-white p-6 rounded-xl">
         <h2 className="text-2xl font-bold mb-4">🏋️‍♂️ Workout Progress</h2>
 

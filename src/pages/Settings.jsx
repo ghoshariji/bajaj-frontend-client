@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Using useNavigate for redirection
 import Lay from "../component/Lay";
+import Loader from "../component/Loader";
 
 const Settings = () => {
   const [profile, setProfile] = useState({
@@ -17,11 +18,15 @@ const Settings = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        setLoading(true)
+
         const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/users/profile`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        setLoading(false)
+
         setProfile({
           name: response.data.name,
           email: response.data.email,
@@ -68,6 +73,8 @@ const handleSubmit = async (e) => {
     formData.append("profilePicture", profile.profilePicture);
   }
 
+  setLoading(true)
+
   try {
     const response = await axios.put(
       `${import.meta.env.VITE_SERVER}/api/users/profile`,
@@ -80,6 +87,8 @@ const handleSubmit = async (e) => {
       }
     );
 
+    setLoading(false)
+
     setMessage("Profile updated successfully.");
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -89,6 +98,8 @@ const handleSubmit = async (e) => {
 
     navigate("/");
   } catch (error) {
+    setLoading(false)
+
     console.error("Update error:", error);
     setMessage(
       error.response?.data?.message || "Profile update failed. Please try again."
@@ -122,6 +133,8 @@ const createImageUrl = (fileData, contentType) => {
   
   return (
     <Lay>
+            {loading && <Loader />}
+
       <div className="container mx-auto p-6">
         <h2 className="text-2xl font-bold mb-4">User Profile Settings</h2>
         {message && <div className="alert alert-info mb-4">{message}</div>}
