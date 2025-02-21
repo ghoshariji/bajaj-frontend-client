@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Cards = () => {
@@ -8,10 +8,10 @@ const Cards = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:5000/api/schedule", {
-        userId: "65a4bcdef0123456789abcd", 
+      await axios.post(   `${import.meta.env.VITE_SERVER}/api/schedule`, {
+        userId: "65a4bcdef0123456789abcd",
         time,
-        repeatDaily, 
+        repeatDaily,
       });
       alert("Schedule set successfully!");
       setShowModal(false);
@@ -20,14 +20,37 @@ const Cards = () => {
     }
   };
 
+
+  const [user, setUser] = useState(null);
+  const token = localStorage.getItem("token");
+
+  const [ai,setAi] = useState({})
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/users/user`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log(res.data.aiResponses[0])
+      setUser(res.data.user);
+      setAi(res.data.aiResponses[0])
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
       {/* First Card with Set Schedule Button */}
 
-       <div className="p-4 bg-gradient-to-r from-purple-300 to-purple-100 rounded-xl shadow-sm">
-        <h3 className="text-gray-600 text-sm">Your Working Balance</h3>
-        <p className="text-3xl font-semibold mt-1">PKR 9,250,000</p>
-        <span className="text-gray-500 text-xs">Saving Account</span>
+      <div className="p-4 bg-gradient-to-r from-purple-300 to-purple-100 rounded-xl shadow-sm">
+        <h3 className="text-gray-600 text-sm">
+          "Push harder, grow stronger daily." 💪🔥
+        </h3>
+        <p className="text-3xl font-semibold mt-1">Burn 500–1000 kcal/day to lose about 0.5–1 kg per week.</p>
         <button
           className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
           onClick={() => setShowModal(true)}
@@ -38,17 +61,15 @@ const Cards = () => {
 
       {/* Other Cards (No Changes) */}
       <div className="p-4 bg-gradient-to-r from-orange-300 to-orange-100 rounded-xl shadow-sm">
-        <h3 className="text-gray-600 text-sm">Your Saving Status</h3>
-        <p className="text-3xl font-semibold mt-1 text-red-500">4.28%</p>
-        <span className="text-gray-500 text-xs">Your spending increased</span>
+        <h3 className="text-gray-600 text-sm">Your Status</h3>
+        <p className="text-3xl font-semibold mt-1 text-red-500">{user && user.name}</p>
+        <span className="text-gray-500 text-xs">{user && user.email}</span>
       </div>
 
       <div className="p-4 bg-gradient-to-r from-green-300 to-green-100 rounded-xl shadow-sm">
-        <h3 className="text-gray-600 text-sm">Card Number</h3>
-        <p className="text-2xl font-semibold mt-1">3829 4820 4629 5025</p>
+        <p className="text-2xl font-semibold mt-1 uppercase">{ai && ai.text}</p>
         <div className="flex justify-between mt-2">
-          <span className="text-gray-500 text-xs">Anita Rose</span>
-          <span className="text-gray-500 text-xs">09/17</span>
+          <span className="text-gray-500 text-xs">{ai && ai.aiResponse}</span>
         </div>
       </div>
 
@@ -57,7 +78,7 @@ const Cards = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-lg font-semibold">Set Time</h2>
-      
+
             {/* Time Input */}
             <input
               type="time"
@@ -65,7 +86,7 @@ const Cards = () => {
               onChange={(e) => setTime(e.target.value)}
               className="mt-2 p-2 border rounded w-full"
             />
-      
+
             {/* Repeat Daily Checkbox */}
             <div className="mt-3 flex items-center">
               <input
@@ -79,7 +100,7 @@ const Cards = () => {
                 Repeat Daily
               </label>
             </div>
-      
+
             <div className="mt-4 flex justify-end">
               <button
                 className="px-4 py-2 bg-gray-500 text-white rounded mr-2"
@@ -97,7 +118,6 @@ const Cards = () => {
           </div>
         </div>
       )}
-      
     </div>
   );
 };
