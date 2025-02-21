@@ -9,7 +9,6 @@ const Register = () => {
     email: "",
     phone:"",
     password: "",
-    phone:"",
     confirmPassword: "",
     termsAccepted: false,
   });
