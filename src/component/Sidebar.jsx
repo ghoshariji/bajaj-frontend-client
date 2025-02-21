@@ -23,8 +23,10 @@ const Sidebar = () => {
       } bg-gray-800 text-white transition-all duration-300 flex flex-col h-screen`}
     >
       <div className="flex items-center justify-between p-4">
-        <span className={`${isSidebarOpen ? "block" : "hidden"} text-lg font-bold`}>
-          Admin
+        <span
+          className={`${isSidebarOpen ? "block" : "hidden"} text-lg font-bold`}
+        >
+          Dashboard
         </span>
         <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
