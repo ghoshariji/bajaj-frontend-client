@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Leader from './pages/LeaderBoard';
 import Setting from './pages/Settings';
+import Leader1 from './pages/Leader1';
 
 // PrivateRoute component checks for token presence
 const PrivateRoute = ({ children }) => {
@@ -21,6 +22,8 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/leader1" element={<Leader1 />} />
+    
 
         {/* Protected Routes */}
         <Route

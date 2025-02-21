@@ -16,7 +16,7 @@ const Leader = () => {
   const [userIds, setUserIds] = useState([]);
   const [userDetails, setUserDetails] = useState([]);
   const [topUsers, setTopUsers] = useState([]);
-  const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+  const token = localStorage.getItem("token"); 
 
   useEffect(() => {
     const fetchWorkouts = async () => {

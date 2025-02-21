@@ -45,13 +45,14 @@ const Navbar = () => {
   // Generate image URL for profile picture if available
   const profileImageUrl = profile.profilePicture
     ? createImageUrl(profile.profilePicture.data.data, profile.profilePicture.contentType)
-    : "https://via.placeholder.com/40"; // Default image if no profile picture is set
+    : "https://via.placeholder.com/40"; 
+    const profileName=profile.name;
 
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center">
       <h1 className="text-xl font-bold">Admin Dashboard</h1>
       <div className="flex items-center space-x-4">
-        <span className="text-gray-700">Welcome, Admin</span>
+        <span className="text-gray-700">Welcome, {profileName} </span>
         <img
           src={profileImageUrl}
           alt="Profile"
